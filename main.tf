@@ -100,15 +100,15 @@ module "dns" {
 #   hostnames  = "${module.provider.hostnames}"
 # }
 
-module "wireguard" {
-  source = "./security/wireguard"
+# module "wireguard" {
+#   source = "./security/wireguard"
 
-  node_count   = "${var.node_count}"
-  connections  = "${module.provider.public_ips}"
-  private_ips  = "${module.provider.private_ips}"
-  hostnames    = "${module.provider.hostnames}"
-  overlay_cidr = "${module.kubernetes.overlay_cidr}"
-}
+#   node_count   = "${var.node_count}"
+#   connections  = "${module.provider.public_ips}"
+#   private_ips  = "${module.provider.private_ips}"
+#   hostnames    = "${module.provider.hostnames}"
+#   overlay_cidr = "${module.kubernetes.overlay_cidr}"
+# }
 
 module "firewall" {
   source = "./security/ufw"
@@ -116,28 +116,24 @@ module "firewall" {
   node_count           = "${var.node_count}"
   connections          = "${module.provider.public_ips}"
   private_interface    = "${module.provider.private_network_interface}"
-  vpn_interface        = "${module.wireguard.vpn_interface}"
-  vpn_port             = "${module.wireguard.vpn_port}"
   kubernetes_interface = "${module.kubernetes.overlay_interface}"
 }
 
 module "etcd" {
   source = "./service/etcd"
 
-  node_count  = "${var.etcd_node_count}"
-  connections = "${module.provider.public_ips}"
-  hostnames   = "${module.provider.hostnames}"
-  vpn_unit    = "${module.wireguard.vpn_unit}"
-  vpn_ips     = "${module.wireguard.vpn_ips}"
+  node_count          = "${var.etcd_node_count}"
+  connections         = "${module.provider.public_ips}"
+  hostnames           = "${module.provider.hostnames}"
+  private_network_ips = "${module.provider.private_network_ips}"
 }
 
 module "kubernetes" {
   source = "./service/kubernetes"
 
-  node_count     = "${var.node_count}"
-  connections    = "${module.provider.public_ips}"
-  cluster_name   = "${var.domain}"
-  vpn_interface  = "${module.wireguard.vpn_interface}"
-  vpn_ips        = "${module.wireguard.vpn_ips}"
-  etcd_endpoints = "${module.etcd.endpoints}"
+  node_count          = "${var.node_count}"
+  connections         = "${module.provider.public_ips}"
+  cluster_name        = "${var.domain}"
+  private_network_ips = "${module.provider.private_network_ips}"
+  etcd_endpoints      = "${module.etcd.endpoints}"
 }

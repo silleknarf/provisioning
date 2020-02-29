@@ -1,6 +1,6 @@
 [Unit]
 Description=etcd
-After=network.target ${vpn_unit}
+After=network.target
 
 [Service]
 Type=notify

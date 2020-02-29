@@ -43,10 +43,10 @@ resource "hcloud_server" "host" {
   count = "${var.hosts}"
 
   connection {
-    user = "root"
-    type = "ssh"
+    user    = "root"
+    type    = "ssh"
     timeout = "2m"
-    host = self.ipv4_address
+    host    = self.ipv4_address
   }
 
   provisioner "remote-exec" {
@@ -56,6 +56,26 @@ resource "hcloud_server" "host" {
       "apt-get install -yq ufw ${join(" ", var.apt_packages)}",
     ]
   }
+}
+
+resource "hcloud_network" "net" {
+  name     = "kube-net"
+  ip_range = "10.0.0.0/8"
+}
+
+resource "hcloud_server_subnet" "subnet" {
+  network_id   = "${hcloud_network.net.id}"
+  type         = "server"
+  network_zone = "eu_central"
+  ip_range     = "10.0.1.0/24"
+}
+
+resource "hcloud_server_network" "network" {
+  server_id  = "${element(hcloud_server.host.*.id, count.index)}"
+  network_id = "${hcloud_network.net.id}"
+  ip         = "${format("10.0.1.%d", count.index + 1)}"
+
+  count = "${var.hosts}"
 }
 
 #resource "hcloud_volume" "volume" {
@@ -77,6 +97,10 @@ output "public_ips" {
 
 output "private_ips" {
   value = "${hcloud_server.host.*.ipv4_address}"
+}
+
+output "private_network_ips" {
+  value = "${hcloud_server_network.network.*.ip}"
 }
 
 output "private_network_interface" {
