@@ -1,27 +1,27 @@
-module "provider" {
-  source = "./provider/hcloud"
-
-  token           = var.hcloud_token
-  ssh_keys        = var.hcloud_ssh_keys
-  location        = var.hcloud_location
-  type            = var.hcloud_type
-  image           = var.hcloud_image
-  hosts           = var.node_count
-  hostname_format = var.hostname_format
-}
-
 # module "provider" {
-#   source = "./provider/scaleway"
-#
-#   organization_id = var.scaleway_organization_id
-#   access_key      = var.scaleway_access_key
-#   secret_key      = var.scaleway_secret_key
-#   zone            = var.scaleway_zone
-#   type            = var.scaleway_type
-#   image           = var.scaleway_image
+#   source = "./provider/hcloud"
+
+#   token           = var.hcloud_token
+#   ssh_keys        = var.hcloud_ssh_keys
+#   location        = var.hcloud_location
+#   type            = var.hcloud_type
+#   image           = var.hcloud_image
 #   hosts           = var.node_count
 #   hostname_format = var.hostname_format
 # }
+
+module "provider" { 
+  source = "./provider/scaleway"
+
+  organization_id = var.scaleway_organization_id
+  access_key      = var.scaleway_access_key
+  secret_key      = var.scaleway_secret_key
+  zone            = var.scaleway_zone
+  type            = var.scaleway_type
+  image           = var.scaleway_image
+  hosts           = var.node_count
+  hostname_format = var.hostname_format
+} 
 
 # module "provider" {
 #   source = "./provider/digitalocean"

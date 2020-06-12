@@ -50,14 +50,10 @@ resource "null_resource" "wireguard" {
 
   provisioner "remote-exec" {
     inline = [
-      "apt-get install -yq software-properties-common build-essential",
+      "apt-get install -yq software-properties-common build-essential linux-headers-kvm linux-image-kvm linux-kvm",
       "add-apt-repository -y ppa:wireguard/wireguard",
       "apt-get update",
     ]
-  }
-
-  provisioner "remote-exec" {
-    script = "${path.module}/scripts/install-kernel-headers.sh"
   }
 
   provisioner "remote-exec" {
