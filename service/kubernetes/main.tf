@@ -21,7 +21,7 @@ variable "overlay_interface" {
 }
 
 variable "overlay_cidr" {
-  default = "10.96.0.0/16"
+  default = "10.96.0.0/12"
 }
 
 resource "random_string" "token1" {
