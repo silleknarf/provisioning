@@ -17,7 +17,7 @@ variable "etcd_endpoints" {
 }
 
 variable "overlay_interface" {
-  default = "weave"
+  default = "ens2"
 }
 
 variable "overlay_cidr" {
