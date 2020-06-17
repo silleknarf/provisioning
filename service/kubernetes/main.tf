@@ -21,7 +21,7 @@ variable "overlay_interface" {
 }
 
 variable "overlay_cidr" {
-  default = "10.96.0.0/12"
+  default = "10.244.0.0/16"
 }
 
 resource "random_string" "token1" {
@@ -97,6 +97,7 @@ data "template_file" "master" {
   template = file("${path.module}/scripts/master.sh")
 
   vars = {
+    overlay_cidr = var.overlay_cidr
     token = local.cluster_token
   }
 }

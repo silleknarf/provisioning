@@ -3,7 +3,6 @@ set -e
 
 kubeadm init --config /tmp/master-configuration.yml \
   --ignore-preflight-errors=Swap,NumCPU
-  --pod-network-cidr=${overlay_cidr}
 
 kubeadm token create ${token}
 
@@ -11,7 +10,7 @@ kubeadm token create ${token}
 ln -s /etc/kubernetes/admin.conf $HOME/.kube/config
 
 until nc -z localhost 6443; do
-  echo "Waiting for API server to respond"
+  echo "Waiting for API server to respond on master"
   sleep 5
 done
 

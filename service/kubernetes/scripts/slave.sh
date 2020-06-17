@@ -2,7 +2,7 @@
 set -e
 
 until $(nc -z ${master_ip} 6443); do
-  echo "Waiting for API server to respond"
+  echo "Waiting for API server to respond on slave"
   sleep 5
 done
 
